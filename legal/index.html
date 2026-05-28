@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Breeze Ar Condicionado - Google Ads & GMN</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0052CC;
+            --secondary-blue: #003DA5;
+            --accent-yellow: #FFD000;
+            --warning-red: #FF6B6B;
+            --success-green: #2ECC71;
+            --dark-bg: #0F1419;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1f2e 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .background-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 82, 204, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 208, 0, 0.05) 0%, transparent 50%);
+        }
+
+        header {
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            background: rgba(15, 20, 25, 0.5);
+            margin-bottom: 25px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 22px;
+            color: var(--accent-yellow);
+            box-shadow: 0 8px 32px rgba(0, 82, 204, 0.3);
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-yellow), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 3px;
+        }
+
+        .period {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            margin-bottom: 32px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--accent-yellow), var(--primary-blue));
+            border-radius: 2px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 208, 0, 0.5), transparent);
+        }
+
+        .metric-card:hover {
+            border-color: var(--accent-yellow);
+            background: rgba(255, 208, 0, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .metric-card.critical {
+            border-color: var(--warning-red);
+            background: rgba(255, 107, 107, 0.08);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, var(--accent-yellow), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-card.critical .metric-value {
+            background: linear-gradient(90deg, var(--warning-red), #FF8787);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-change {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .warning-badge {
+            display: inline-block;
+            background: var(--warning-red);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .opportunity-card {
+            background: var(--card-bg);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 12px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 14px;
+        }
+
+        .opportunity-header {
+            display: flex;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .opportunity-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-yellow), var(--primary-blue));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .opportunity-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent-yellow);
+        }
+
+        .opportunity-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .money-lost {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--warning-red);
+            background: rgba(255, 107, 107, 0.1);
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .money-won {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--success-green);
+            background: rgba(46, 204, 113, 0.1);
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 16px;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            gap: 10px;
+        }
+
+        .bar {
+            width: 60px;
+            background: linear-gradient(180deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 82, 204, 0.3);
+        }
+
+        .bar:hover {
+            filter: brightness(1.2);
+            box-shadow: 0 8px 32px rgba(0, 82, 204, 0.5);
+        }
+
+        .bar.warning {
+            background: linear-gradient(180deg, var(--warning-red), #FF8787);
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .bar-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .bar-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-yellow);
+            margin-bottom: 5px;
+        }
+
+        .comparison-box {
+            background: linear-gradient(135deg, rgba(0, 82, 204, 0.1), rgba(255, 208, 0, 0.05));
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .comparison-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .comparison-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .comparison-value {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .comparison-value.potential {
+            background: linear-gradient(90deg, var(--success-green), #27AE60);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .insight-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .insight-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-yellow);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .insight-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent-yellow), #FFC300);
+            color: var(--dark-bg);
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--accent-yellow);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(255, 208, 0, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            border-top: 1px solid var(--card-border);
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 22px;
+            }
+
+            .logo-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-box {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .bar-chart {
+                flex-direction: column;
+                height: auto;
+                align-items: center;
+                margin: 15px 0;
+            }
+
+            .bar {
+                width: 100%;
+                height: 50px;
+            }
+
+            .bar-item {
+                flex-direction: row-reverse;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+
+            .bar-label, .bar-value {
+                text-align: left;
+            }
+
+            .insights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effect"></div>
+
+    <header>
+        <div class="logo-section">
+            <div class="logo-circle">B</div>
+            <div>
+                <h1>Breeze Ar Condicionado</h1>
+                <p class="period">Google Ads & Google Meu Negócio - Análise de Oportunidades</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- RESUMO CRÍTICO -->
+        <section class="section">
+            <div class="section-title">Diagnóstico Crítico</div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card critical">
+                    <div class="metric-label">Classificação Perdida (Pesquisa)</div>
+                    <div class="metric-value">64.48%</div>
+                    <div class="metric-change">Das impressões potenciais estão sendo perdidas</div>
+                    <div class="warning-badge">🔴 CRÍTICO</div>
+                </div>
+
+                <div class="metric-card critical">
+                    <div class="metric-label">1ª Posição Perdida</div>
+                    <div class="metric-value">90%+</div>
+                    <div class="metric-change">Deixando passar a maioria das oportunidades</div>
+                    <div class="warning-badge">🔴 CRÍTICO</div>
+                </div>
+
+                <div class="metric-card critical">
+                    <div class="metric-label">Cliques Potenciais Perdidos</div>
+                    <div class="metric-value">80%</div>
+                    <div class="metric-change">Recebendo apenas 19,9% dos cliques possíveis</div>
+                    <div class="warning-badge">🔴 CRÍTICO</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Impressões Pesquisa</div>
+                    <div class="metric-value">1,563</div>
+                    <div class="metric-change">Últimos 30 dias - volume baixo</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Cliques Recebidos</div>
+                    <div class="metric-value">81</div>
+                    <div class="metric-change">Últimos 30 dias - muito abaixo do potencial</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">CPC Médio</div>
+                    <div class="metric-value">R$ 4,75</div>
+                    <div class="metric-change">Custo por clique</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DINHEIRO DEIXADO NA MESA -->
+        <section class="section">
+            <div class="section-title">💰 Oportunidade Financeira</div>
+            
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">⚡</div>
+                    <div>
+                        <div class="opportunity-title">O Que Seu Orçamento Rende HOJE</div>
+                        <div class="opportunity-desc">
+                            Você investe R$ 4,75 por clique e sua classificação atual é muito baixa. Com isso, seu orçamento mensal de R$ 384,75 rende apenas 81 cliques.
+                        </div>
+                        <div class="money-lost">R$ 384,75/mês = 81 cliques (ATUAL)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">🚀</div>
+                    <div>
+                        <div class="opportunity-title">O Mesmo Orçamento Com Melhor Classificação</div>
+                        <div class="opportunity-desc">
+                            Melhorando sua classificação (Quality Score), seus anúncios aparecerão em posições melhores. Com a mesma quantidade de dinheiro gasto, você receberia ~5x mais cliques.
+                        </div>
+                        <div class="money-won">R$ 384,75/mês = ~405 cliques (COM OTIMIZAÇÃO)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">📊</div>
+                    <div>
+                        <div class="opportunity-title">A Diferença em Números Reais</div>
+                        <div class="opportunity-desc">
+                            Seu orçamento mensal atual: R$ 384,75<br>
+                            Cliques recebidos: 81<br>
+                            Cliques potencial (com otimização): ~405<br>
+                            <strong>Diferença: ~324 cliques adicionais/mês com o mesmo dinheiro.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ANÁLISE DETALHADA GOOGLE ADS -->
+        <section class="section">
+            <div class="section-title">Análise Detalhada - Google Ads</div>
+            
+            <div class="chart-container">
+                <h3 style="margin-bottom: 20px; color: var(--warning-red);">⚠️ Impressões Perdidas por Motivo</h3>
+                <div class="bar-chart">
+                    <div class="bar-item">
+                        <div class="bar warning" style="height: 70%;"></div>
+                        <div class="bar-value" style="color: var(--warning-red);">64.48%</div>
+                        <div class="bar-label">Classificação (Pesquisa)</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar warning" style="height: 65%;"></div>
+                        <div class="bar-value" style="color: var(--warning-red);">70.65%</div>
+                        <div class="bar-label">Top (Classificação)</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar warning" style="height: 35%;"></div>
+                        <div class="bar-value" style="color: var(--warning-red);">35.52%</div>
+                        <div class="bar-label">Share Impressões</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar warning" style="height: 20%;"></div>
+                        <div class="bar-value" style="color: var(--warning-red);">19.90%</div>
+                        <div class="bar-label">Share Cliques</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-title">⚠️ Status da Conta</div>
+                <div class="insight-text">
+                    Sua campanha está marcada como "QUALIFICADA (LIMITADA)" - seus anúncios são mostrados, mas seus lances não estão totalmente otimizados.
+                </div>
+            </div>
+        </section>
+
+        <!-- GOOGLE MEU NEGÓCIO -->
+        <section class="section">
+            <div class="section-title">Google Meu Negócio - Performance</div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Chamadas Feitas</div>
+                    <div class="metric-value">32</div>
+                    <div class="metric-change">Dez 2025 - Mai 2025</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Agendamentos</div>
+                    <div class="metric-value">0</div>
+                    <div class="metric-change">Taxa de conversão = 0%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Avaliações Solicitadas</div>
+                    <div class="metric-value">277</div>
+                    <div class="metric-change">Solicitações de notas</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Cliques para Site</div>
+                    <div class="metric-value">41</div>
+                    <div class="metric-change">Visitantes do seu site</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-label">Interações no Perfil</div>
+                    <div class="metric-value">350</div>
+                    <div class="metric-change">Visualizações e ações</div>
+                </div>
+
+                <div class="metric-card critical">
+                    <div class="metric-label">Falta de Conteúdo</div>
+                    <div class="metric-value">❌</div>
+                    <div class="metric-change">Poucas fotos e vídeos</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRINCIPAIS PROBLEMAS -->
+        <section class="section">
+            <div class="section-title">Problemas Identificados</div>
+            
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-title">1. Sem Tags de Conversão</div>
+                    <div class="insight-text">
+                        O Google Ads não consegue rastrear conversões. Sem dados de conversão, o sistema não consegue otimizar seus anúncios adequadamente. Isso afeta diretamente o Quality Score.
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-title">2. Baixa Qualidade de Anúncio</div>
+                    <div class="insight-text">
+                        Seus anúncios têm uma classificação muito baixa. Isso é determinado por relevância, taxa de cliques esperada e experiência na página de destino.
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-title">3. Site Sem Otimização</div>
+                    <div class="insight-text">
+                        Nenhuma tag do Google no site. Apenas um botão de WhatsApp; todos os CTAs levam a um formulário interno. Sem rastreamento adequado.
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-title">4. GMN Pouco Completo</div>
+                    <div class="insight-text">
+                        Google Meu Negócio com poucas fotos e vídeos. Isso afeta significativamente a taxa de cliques e conversões das buscas locais.
+                    </div>
+                </div>
+
+                <div class="insight-card">
+                    <div class="insight-title">5. Cauda Longa Não Otimizada</div>
+                    <div class="insight-text">
+                        As buscas por "breeze" e "ar condicionado" estão trazendo valor, mas há muitas variações de palavras-chave de cauda longa não aproveitadas. Existe oportunidade significativa em segmentar melhor por serviço específico, localização e intenção de busca.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OPORTUNIDADES DE MELHORIA -->
+        <section class="section">
+            <div class="section-title">Plano de Ação - Como Recuperar Este Dinheiro</div>
+            
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">1️⃣</div>
+                    <div>
+                        <div class="opportunity-title">Implementar Tags de Conversão</div>
+                        <div class="opportunity-desc">
+                            Instalar Google Ads Conversion Tag e Google Analytics no site. Isso permite rastrear onde os visitantes vêm e o que fazem no seu site. O Google pode então otimizar automaticamente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">2️⃣</div>
+                    <div>
+                        <div class="opportunity-title">Melhorar Quality Score</div>
+                        <div class="opportunity-desc">
+                            Otimizar anúncios com copy mais relevante, melhorar landing pages, aumentar CTR esperado. Seu Quality Score subir de 2-3 para 7-8 pode aumentar suas posições drasticamente.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">3️⃣</div>
+                    <div>
+                        <div class="opportunity-title">Otimizar Landing Page + Call Tracking</div>
+                        <div class="opportunity-desc">
+                            Criar landing pages específicas para cada serviço com rastreamento de cliques no WhatsApp via call tracking. Isso permite saber quais palavras-chave geram clientes reais. <strong>Serviço pago.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">4️⃣</div>
+                    <div>
+                        <div class="opportunity-title">Potencializar Google Meu Negócio</div>
+                        <div class="opportunity-desc">
+                            Adicionar mais fotos e vídeos mostrando o trabalho. Responder reviews. Usar os Posts do GMN para campanhas sazonais. Isso aumenta cliques em 30-50%.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="opportunity-card">
+                <div class="opportunity-header">
+                    <div class="opportunity-icon">5️⃣</div>
+                    <div>
+                        <div class="opportunity-title">Implementar Extensões de Anúncio</div>
+                        <div class="opportunity-desc">
+                            Call extensions, message extensions, sitelink extensions. Isso melhora o CTR (taxa de cliques) significativamente e pode melhorar Quality Score.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESUMO FINANCEIRO -->
+        <section class="section">
+            <div class="section-title">Resumo do Potencial Financeiro</div>
+            
+            <div class="comparison-box">
+                <div class="comparison-item">
+                    <div class="comparison-label">COM CLASSIFICAÇÃO BAIXA (ATUAL)</div>
+                    <div class="comparison-value" style="color: var(--warning-red); font-size: 24px;">R$ 384,75</div>
+                    <div class="comparison-label" style="color: var(--text-secondary);">Mês = 81 cliques</div>
+                </div>
+                <div class="comparison-item">
+                    <div class="comparison-label">COM MELHOR CLASSIFICAÇÃO</div>
+                    <div class="comparison-value potential" style="font-size: 24px;">R$ 384,75</div>
+                    <div class="comparison-label" style="color: var(--success-green);">Mês = ~405 cliques</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Comparação Real - MESMO ORÇAMENTO</h3>
+                <div class="comparison-box">
+                    <div class="comparison-item">
+                        <div class="comparison-label">Orçamento/Mês</div>
+                        <div class="comparison-value" style="color: var(--accent-yellow); font-size: 24px;">R$ 384,75</div>
+                        <div class="comparison-label" style="color: var(--text-secondary); margin-top: 10px;">Igual em ambos</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label">Cliques Atuais</div>
+                        <div class="comparison-value" style="color: var(--warning-red); font-size: 24px;">81</div>
+                        <div class="comparison-label" style="color: var(--text-secondary); margin-top: 10px;">Últimos 30 dias</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="font-size: 18px; color: var(--accent-yellow); font-weight: bold;">⬇️ OTIMIZAR ⬇️</div>
+                </div>
+                <div class="comparison-box">
+                    <div class="comparison-item">
+                        <div class="comparison-label">Orçamento/Mês</div>
+                        <div class="comparison-value" style="color: var(--accent-yellow); font-size: 24px;">R$ 384,75</div>
+                        <div class="comparison-label" style="color: var(--text-secondary); margin-top: 10px;">MESMO orçamento</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label">Cliques Potencial</div>
+                        <div class="comparison-value potential" style="font-size: 24px;">~405</div>
+                        <div class="comparison-label" style="color: var(--success-green); margin-top: 10px;">Com melhor classificação</div>
+                    </div>
+                </div>
+                <div style="margin-top: 25px; padding: 18px; background: rgba(46, 204, 113, 0.1); border-radius: 8px; border-left: 4px solid var(--success-green);">
+                    <div style="font-size: 14px; color: var(--success-green); font-weight: 600;">OPORTUNIDADE: ~324 cliques adicionais/mês</div>
+                    <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;"><strong>Não é preciso aumentar orçamento. É preciso melhorar a classificação do seu anúncio para render mais com o mesmo dinheiro.</strong></div>
+                </div>
+            </div>
+        </section>
+
+
+    </div>
+
+    <footer class="footer">
+        <p>Relatório gerado em Maio de 2026 | Análise de Google Ads & Google Meu Negócio</p>
+        <p style="margin-top: 10px;">Breeze Ar Condicionado - São Paulo, SP</p>
+    </footer>
+
+    <script>
+        // Animações suaves ao scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.metric-card, .opportunity-card, .chart-container, .insight-card').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+
+        // Efeito hover nas barras
+        document.querySelectorAll('.bar').forEach(bar => {
+            bar.addEventListener('mouseenter', function() {
+                this.style.transform = 'scaleY(1.05)';
+            });
+            bar.addEventListener('mouseleave', function() {
+                this.style.transform = 'scaleY(1)';
+            });
+        });
+    </script>
+</body>
+</html>
